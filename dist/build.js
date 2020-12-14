@@ -995,6 +995,8 @@ utils.retries = 2;
 utils.retry_delay = 200;
 utils.timeout = 5000;
 utils.nonce = "";
+utils.simulate_platform = "";
+utils.advertisement_id = "";
 utils.instrumentation = {};
 utils.navigationTimingAPIEnabled = "undefined" !== typeof window && !!(window.performance && window.performance.timing && window.performance.timing.navigationStart);
 utils.timeSinceNavigationStart = function() {
@@ -1455,9 +1457,10 @@ utils.getScreenWidth = function() {
   return screen.width || 0;
 };
 utils.getUserData = function(a) {
-  var b = {}, b = utils.addPropertyIfNotNull(b, "http_origin", document.URL), b = utils.addPropertyIfNotNull(b, "user_agent", navigator.userAgent), b = utils.addPropertyIfNotNull(b, "language", utils.getBrowserLanguageCode()), b = utils.addPropertyIfNotNull(b, "screen_width", utils.getScreenWidth()), b = utils.addPropertyIfNotNull(b, "screen_height", utils.getScreenHeight()), b = utils.addPropertyIfNotNull(b, "http_referrer", document.referrer), b = utils.addPropertyIfNotNull(b, "browser_fingerprint_id", 
-  a.browser_fingerprint_id), b = utils.addPropertyIfNotNull(b, "developer_identity", a.identity), b = utils.addPropertyIfNotNull(b, "identity", a.identity), b = utils.addPropertyIfNotNull(b, "sdk", "web");
-  return b = utils.addPropertyIfNotNull(b, "sdk_version", config.version);
+  var b = {}, b = utils.addPropertyIfNotNull(b, "http_origin", document.URL), b = utils.addPropertyIfNotNull(b, "user_agent", navigator.userAgent), b = utils.addPropertyIfNotNull(b, "language", utils.getBrowserLanguageCode()), b = utils.addPropertyIfNotNull(b, "screen_width", utils.getScreenWidth()), b = utils.addPropertyIfNotNull(b, "screen_height", utils.getScreenHeight()), b = utils.addPropertyIfNotNull(b, "http_referrer", document.referrer), b = utils.addPropertyIfNotNull(b, "developer_identity", 
+  a.identity), b = utils.addPropertyIfNotNull(b, "identity", a.identity), b = utils.addPropertyIfNotNull(b, "sdk", "web"), b = utils.addPropertyIfNotNull(b, "sdk_version", config.version), b = utils.addPropertyIfNotNull(b, "browser_fingerprint_id", a.browser_fingerprint_id);
+  "ios" === utils.simulate_platform ? b = utils.addPropertyIfNotNull(b, "idfa", utils.advertisement_id) : "android" === utils.simulate_platform && (b = utils.addPropertyIfNotNull(b, "aaid", utils.advertisement_id));
+  return b;
 };
 utils.isIframe = function() {
   return window.self !== window.top;
@@ -2750,6 +2753,8 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.retry_delay = c && c.retry_delay && Number.isInteger(c.retry_delay) ? c.retry_delay : utils.retry_delay;
   utils.timeout = c && c.timeout && Number.isInteger(c.timeout) ? c.timeout : utils.timeout;
   utils.nonce = c && c.nonce ? c.nonce : utils.nonce;
+  utils.simulate_platform = c && c.simulate_platform ? c.simulate_platform : utils.simulate_platform;
+  utils.advertisement_id = c && c.advertisement_id ? c.advertisement_id : utils.advertisement_id;
   utils.userPreferences.trackingDisabled = c && c.tracking_disabled && !0 === c.tracking_disabled ? !0 : !1;
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);

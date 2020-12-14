@@ -278,6 +278,8 @@ Branch.prototype._publishEvent = function(event, data) {
  * | metadata | *optional* - `object`. Key-value pairs used to target Journeys users via the "is viewing a page with metadata key" filter.
  * | nonce | *optional* - `string`. A nonce value that will be added to branch-journey-cta injected script. Used to allow that script from a Content Security Policy.
  * | tracking_disabled | *optional* - `boolean`. true disables tracking
+ * | simulate_platform | *optional* - `string`. Accepts `android` / `ios`. Used to simulate as such events were being sent natively by the Android or iOS devices.
+ * | advertisement_id | *optional* - `string`. Value will be injected as `aaid` or `idfa` if supplied, respective of the
  *
  * ##### Usage
  * ```js
@@ -333,6 +335,8 @@ Branch.prototype['init'] = wrap(
 		utils.retry_delay = options && options['retry_delay'] && Number.isInteger(options['retry_delay']) ? options['retry_delay'] : utils.retry_delay;
 		utils.timeout = options && options['timeout'] && Number.isInteger(options['timeout']) ? options['timeout'] : utils.timeout;
 		utils.nonce = options && options['nonce'] ? options['nonce'] : utils.nonce;
+		utils.simulate_platform = options && options['simulate_platform'] ? options['simulate_platform'] : utils.simulate_platform;
+		utils.advertisement_id = options && options['advertisement_id'] ? options['advertisement_id'] : utils.advertisement_id;
 
 		utils.userPreferences.trackingDisabled = options && options['tracking_disabled'] && options['tracking_disabled'] === true ? true : false;
 		utils.userPreferences.allowErrorsInCallback = false;

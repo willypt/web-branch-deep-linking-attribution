@@ -21,6 +21,9 @@ utils.retry_delay = 200; // Amount of time in milliseconds to wait before re-att
 utils.timeout = 5000; // Duration in milliseconds that the system should wait for a response before considering any Branch API call to have timed out.
 utils.nonce = ''; // Nonce value to allow for CSP whitelisting
 
+utils.simulate_platform = ''; // Simulate device detection to Android or iOS instead of web
+utils.advertisement_id = ''; // Injects aaid or idfa, respective to platform
+
 // Properties and function related to calculating Branch request roundtrip time
 utils.instrumentation = {};
 utils.navigationTimingAPIEnabled = typeof window !== 'undefined' && !!(window.performance && window.performance.timing && window.performance.timing.navigationStart);
@@ -1160,11 +1163,19 @@ utils.getUserData = function(branch) {
 	user_data = utils.addPropertyIfNotNull(user_data, "screen_width", utils.getScreenWidth());
 	user_data = utils.addPropertyIfNotNull(user_data, "screen_height", utils.getScreenHeight());
 	user_data = utils.addPropertyIfNotNull(user_data, "http_referrer", document.referrer);
-	user_data = utils.addPropertyIfNotNull(user_data, "browser_fingerprint_id", branch.browser_fingerprint_id);
 	user_data = utils.addPropertyIfNotNull(user_data, "developer_identity", branch.identity);
 	user_data = utils.addPropertyIfNotNull(user_data, "identity", branch.identity);
 	user_data = utils.addPropertyIfNotNull(user_data, "sdk", "web");
 	user_data = utils.addPropertyIfNotNull(user_data, "sdk_version", config.version);
+	user_data = utils.addPropertyIfNotNull(user_data, "browser_fingerprint_id", branch.browser_fingerprint_id);
+
+	if (utils.simulate_platform ===  'ios') {
+		user_data = utils.addPropertyIfNotNull(user_data, "idfa", utils.advertisement_id);
+
+	} else if (utils.simulate_platform === 'android') {
+		user_data = utils.addPropertyIfNotNull(user_data, "aaid", utils.advertisement_id);
+	}
+
 	return user_data;
 };
 
